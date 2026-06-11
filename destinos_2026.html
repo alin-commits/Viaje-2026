@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5 Destinos · Vuelo Directo · 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:'Inter',sans-serif;background:#0a0b09;color:#e2ddd4;overflow-x:hidden;line-height:1.6}
+
+/* ─── VARIABLES ─── */
+:root{
+  --ink:#0a0b09;--paper:#e2ddd4;
+  --dim:#1a1c18;--card:#161814;--border:rgba(255,255,255,.07);
+  --muted:#7a7870;--gold:#c8a56a;--gold-dim:rgba(200,165,106,.12);
+  --m-green:#1a6b3e;--m-green-l:#2ea864;--m-dim:rgba(26,107,62,.18);
+  --s-blue:#2a4a72;--s-blue-l:#4d80be;--s-dim:rgba(42,74,114,.18);
+  --d-amber:#7a4e18;--d-amber-l:#c47c32;--d-dim:rgba(122,78,24,.18);
+  --p-teal:#1a5a5a;--p-teal-l:#2ea8a8;--p-dim:rgba(26,90,90,.18);
+  --a-rust:#6e2e18;--a-rust-l:#c85830;--a-dim:rgba(110,46,24,.18);
+}
+
+/* ─── COVER ─── */
+.cover{
+  min-height:100vh;position:relative;
+  display:grid;grid-template-columns:repeat(5,1fr);
+  overflow:hidden;
+}
+.cover-slice{
+  position:relative;overflow:hidden;
+  background-size:cover;background-position:center;
+  transition:flex .5s ease;
+  cursor:default;
+}
+.cover-slice::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to bottom, rgba(0,0,0,.1) 0%, rgba(0,0,0,.7) 100%);
+  transition:opacity .4s;
+}
+.cover-slice:hover::after{opacity:.45}
+.s1{background-image:url('https://images.unsplash.com/photo-1573246123716-6b1782bfc499?w=700&q=75')}
+.s2{background-image:url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=700&q=75')}
+.s3{background-image:url('https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=700&q=75')}
+.s4{background-image:url('https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=700&q=75')}
+.s5{background-image:url('https://images.unsplash.com/photo-1533104816931-20fa691ff6ca?w=700&q=75')}
+
+.slice-label{
+  position:absolute;bottom:2.5rem;left:1.5rem;
+  z-index:2;color:white;
+}
+.slice-num{font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;opacity:.6;margin-bottom:.3rem;font-weight:500}
+.slice-name{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:600;line-height:1.1}
+.slice-country{font-size:.75rem;opacity:.65;margin-top:.25rem}
+
+.cover-center{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  z-index:10;text-align:center;padding:0 1rem;pointer-events:none;
+}
+.cover-eyebrow{
+  font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--gold);font-weight:500;margin-bottom:1rem;
+  background:rgba(0,0,0,.35);display:inline-block;
+  padding:.3rem .9rem;border-radius:20px;
+  border:1px solid rgba(200,165,106,.25);
+}
+.cover-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2.5rem,5vw,4.5rem);
+  font-weight:400;line-height:.95;
+  color:white;
+  text-shadow:0 2px 30px rgba(0,0,0,.8);
+}
+.cover-title em{font-style:italic;color:var(--gold)}
+.cover-sub{
+  margin-top:1.2rem;font-size:.88rem;color:rgba(255,255,255,.65);
+  display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;
+}
+.cover-pill{
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);
+  border-radius:20px;padding:.25rem .8rem;font-size:.75rem;
+  backdrop-filter:blur(6px);
+}
+
+/* ─── NAV ─── */
+.nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(10,11,9,.96);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  display:flex;overflow-x:auto;
+}
+.nav::-webkit-scrollbar{display:none}
+.nav-btn{
+  flex:1;min-width:140px;
+  padding:1rem 1.2rem;
+  background:none;border:none;
+  color:var(--muted);
+  font-family:'Inter',sans-serif;font-size:.75rem;font-weight:500;
+  letter-spacing:.08em;text-transform:uppercase;
+  cursor:pointer;transition:color .2s;
+  position:relative;white-space:nowrap;
+}
+.nav-btn::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;
+  height:2px;transform:scaleX(0);transition:transform .25s ease;
+}
+.nav-btn.active{color:var(--paper)}
+.nav-btn.active::after{transform:scaleX(1)}
+.nb-m::after{background:var(--m-green-l)}
+.nb-s::after{background:var(--s-blue-l)}
+.nb-d::after{background:var(--d-amber-l)}
+.nb-p::after{background:var(--p-teal-l)}
+.nb-a::after{background:var(--a-rust-l)}
+
+/* ─── SECTIONS ─── */
+.dest{display:none;padding:0 0 5rem}
+.dest.active{display:block}
+.container{max-width:1080px;margin:0 auto;padding:0 2rem}
+
+/* ─── HERO ─── */
+.dest-hero{
+  height:62vh;min-height:400px;
+  position:relative;overflow:hidden;
+}
+.dest-hero img{width:100%;height:100%;object-fit:cover;display:block}
+.dest-hero-grad{
+  position:absolute;inset:0;
+  display:flex;align-items:flex-end;
+  padding:3rem;
+}
+.dest-hero-grad::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to top, rgba(10,11,9,.95) 0%, rgba(10,11,9,.4) 50%, transparent 100%);
+}
+.hero-text{position:relative;z-index:1}
+.hero-label{
+  font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;
+  font-weight:500;margin-bottom:.5rem;
+}
+.hero-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2.4rem,5vw,4rem);
+  font-weight:600;line-height:1;
+  margin-bottom:.65rem;
+}
+.hero-desc{
+  font-size:.95rem;color:rgba(255,255,255,.65);
+  max-width:520px;line-height:1.55;
+}
+
+/* ─── FLIGHT BAR ─── */
+.flight-bar{
+  display:flex;align-items:center;gap:2rem;
+  padding:1rem 2rem;
+  border-bottom:1px solid var(--border);
+  font-size:.82rem;flex-wrap:wrap;
+}
+.fb-item{display:flex;align-items:center;gap:.6rem}
+.fb-icon{font-size:1.1rem;flex-shrink:0}
+.fb-label{color:var(--muted);font-size:.72rem;display:block;margin-bottom:.1rem}
+.fb-val{font-weight:500;color:var(--paper)}
+.fb-sep{width:1px;height:2rem;background:var(--border);flex-shrink:0}
+.doc-badge{
+  margin-left:auto;padding:.28rem .9rem;border-radius:20px;
+  font-size:.72rem;font-weight:500;
+}
+.doc-ok{background:rgba(46,168,100,.15);color:#5dd48e;border:1px solid rgba(46,168,100,.25)}
+.doc-warn{background:rgba(200,165,106,.12);color:var(--gold);border:1px solid rgba(200,165,106,.25)}
+
+/* ─── STATS ROW ─── */
+.stats-row{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+  gap:.6rem;padding:1.5rem 2rem;
+  border-bottom:1px solid var(--border);
+}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:.9rem 1rem;text-align:center}
+.stat.hl{border-width:1px}
+.stat .n{
+  font-family:'Playfair Display',serif;
+  font-size:1.5rem;font-weight:600;line-height:1;margin-bottom:.25rem;
+}
+.stat .l{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+
+/* ─── CONTENT GRID ─── */
+.content-grid{
+  display:grid;grid-template-columns:1fr 340px;
+  gap:2rem;padding:2rem;
+}
+@media(max-width:760px){.content-grid{grid-template-columns:1fr}}
+
+/* ─── PHOTO MOSAIC ─── */
+.mosaic{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  grid-template-rows:220px 220px;
+  gap:.5rem;border-radius:12px;overflow:hidden;
+  margin-bottom:2rem;
+}
+.mosaic .ph{position:relative;overflow:hidden}
+.mosaic .ph:first-child{grid-row:1/3}
+.mosaic .ph img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease}
+.mosaic .ph:hover img{transform:scale(1.04)}
+.ph-cap{
+  position:absolute;bottom:0;left:0;right:0;
+  background:linear-gradient(transparent, rgba(0,0,0,.65));
+  color:white;padding:.8rem .7rem .5rem;
+  font-size:.7rem;font-weight:500;
+}
+
+/* ─── EXPERIENCES ─── */
+.section-label{
+  font-size:.65rem;font-weight:600;
+  letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:.9rem;
+  display:flex;align-items:center;gap:.6rem;
+}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.exp-list{display:flex;flex-direction:column;gap:.45rem;margin-bottom:2rem}
+.exp-item{
+  display:flex;gap:.85rem;align-items:flex-start;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:9px;padding:.75rem 1rem;
+  transition:border-color .2s;
+}
+.exp-item:hover{border-color:rgba(255,255,255,.14)}
+.exp-num{
+  width:22px;height:22px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.7rem;font-weight:600;flex-shrink:0;margin-top:1px;
+}
+.exp-body{}
+.exp-name{font-size:.9rem;font-weight:500;margin-bottom:.18rem;color:var(--paper)}
+.exp-desc{font-size:.78rem;color:var(--muted);line-height:1.45}
+
+/* ─── SIDEBAR ─── */
+.sidebar{}
+
+/* Budget card */
+.budget-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:12px;overflow:hidden;margin-bottom:1.2rem;
+}
+.bc-head{padding:.85rem 1.1rem;font-size:.65rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:white}
+.bc-body{padding:.25rem 0}
+.bc-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:.55rem 1.1rem;font-size:.83rem;
+  border-bottom:1px solid var(--border);
+}
+.bc-row:last-child{border-bottom:none}
+.bc-val{color:var(--muted)}
+.bc-row.total{
+  font-weight:600;font-size:.92rem;padding:.75rem 1.1rem;
+}
+.bc-row.total .bc-val{color:var(--paper);font-weight:600}
+
+/* Links card */
+.links-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:12px;overflow:hidden;
+}
+.lc-head{padding:.85rem 1.1rem;font-size:.65rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:white}
+.link-item{
+  display:flex;align-items:center;gap:.65rem;
+  padding:.65rem 1.1rem;
+  border-bottom:1px solid var(--border);
+  text-decoration:none;color:var(--paper);
+  font-size:.8rem;font-weight:500;
+  transition:background .15s;
+}
+.link-item:last-child{border-bottom:none}
+.link-item:hover{background:rgba(255,255,255,.04)}
+.link-item .li-icon{font-size:.85rem;flex-shrink:0;width:20px;text-align:center}
+.link-item span{flex:1}
+.link-item .li-arr{color:var(--muted);font-size:.7rem}
+.link-item.primary{background:var(--gold-dim);border-color:rgba(200,165,106,.2)}
+.link-item.primary .li-arr{color:var(--gold)}
+
+/* ─── NOTE BOX ─── */
+.note-box{
+  border-radius:9px;padding:.85rem 1.05rem;
+  font-size:.8rem;line-height:1.55;
+  margin-bottom:1.5rem;
+  display:flex;gap:.65rem;align-items:flex-start;
+  border:1px solid;
+}
+.note-icon{font-size:1rem;flex-shrink:0;margin-top:1px}
+
+/* ─── COLOR THEMING ─── */
+/* Marrakech */
+.dest-m .hero-label{color:var(--m-green-l)}
+.dest-m .stat.hl{border-color:var(--m-green-l)}
+.dest-m .stat.hl .n{color:var(--m-green-l)}
+.dest-m .exp-num{background:var(--m-dim);color:var(--m-green-l)}
+.dest-m .bc-head,.dest-m .lc-head{background:var(--m-green)}
+.dest-m .bc-row.total{background:var(--m-dim)}
+.dest-m .note-box{background:var(--m-dim);border-color:rgba(46,168,100,.22);color:#9ae8c0}
+/* Scotland */
+.dest-s .hero-label{color:var(--s-blue-l)}
+.dest-s .stat.hl{border-color:var(--s-blue-l)}
+.dest-s .stat.hl .n{color:var(--s-blue-l)}
+.dest-s .exp-num{background:var(--s-dim);color:var(--s-blue-l)}
+.dest-s .bc-head,.dest-s .lc-head{background:var(--s-blue)}
+.dest-s .bc-row.total{background:var(--s-dim)}
+.dest-s .note-box{background:var(--s-dim);border-color:rgba(77,128,190,.22);color:#a0c4e8}
+/* Dolomitas */
+.dest-d .hero-label{color:var(--d-amber-l)}
+.dest-d .stat.hl{border-color:var(--d-amber-l)}
+.dest-d .stat.hl .n{color:var(--d-amber-l)}
+.dest-d .exp-num{background:var(--d-dim);color:var(--d-amber-l)}
+.dest-d .bc-head,.dest-d .lc-head{background:var(--d-amber)}
+.dest-d .bc-row.total{background:var(--d-dim)}
+.dest-d .note-box{background:var(--d-dim);border-color:rgba(196,124,50,.22);color:#e8c090}
+/* Oporto */
+.dest-p .hero-label{color:var(--p-teal-l)}
+.dest-p .stat.hl{border-color:var(--p-teal-l)}
+.dest-p .stat.hl .n{color:var(--p-teal-l)}
+.dest-p .exp-num{background:var(--p-dim);color:var(--p-teal-l)}
+.dest-p .bc-head,.dest-p .lc-head{background:var(--p-teal)}
+.dest-p .bc-row.total{background:var(--p-dim)}
+.dest-p .note-box{background:var(--p-dim);border-color:rgba(46,168,168,.22);color:#90e0e0}
+/* Atenas */
+.dest-a .hero-label{color:var(--a-rust-l)}
+.dest-a .stat.hl{border-color:var(--a-rust-l)}
+.dest-a .stat.hl .n{color:var(--a-rust-l)}
+.dest-a .exp-num{background:var(--a-dim);color:var(--a-rust-l)}
+.dest-a .bc-head,.dest-a .lc-head{background:var(--a-rust)}
+.dest-a .bc-row.total{background:var(--a-dim)}
+.dest-a .note-box{background:var(--a-dim);border-color:rgba(200,88,48,.22);color:#f0b090}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:680px){
+  .cover{grid-template-columns:1fr 1fr 1fr 1fr 1fr}
+  .slice-name{font-size:.85rem}
+  .mosaic{grid-template-rows:160px 160px}
+  .flight-bar{gap:1rem}
+  .fb-sep{display:none}
+  .doc-badge{margin-left:0}
+  .stats-row{grid-template-columns:repeat(3,1fr);padding:1rem}
+  .content-grid{padding:1rem}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ COVER ══ -->
+<div class="cover">
+  <div class="cover-slice s1">
+    <div class="slice-label">
+      <div class="slice-num">01</div>
+      <div class="slice-name">Marrakech</div>
+      <div class="slice-country">Marruecos</div>
+    </div>
+  </div>
+  <div class="cover-slice s2">
+    <div class="slice-label">
+      <div class="slice-num">02</div>
+      <div class="slice-name">Escocia</div>
+      <div class="slice-country">Highlands + Skye</div>
+    </div>
+  </div>
+  <div class="cover-slice s3">
+    <div class="slice-label">
+      <div class="slice-num">03</div>
+      <div class="slice-name">Dolomitas</div>
+      <div class="slice-country">Italia</div>
+    </div>
+  </div>
+  <div class="cover-slice s4">
+    <div class="slice-label">
+      <div class="slice-num">04</div>
+      <div class="slice-name">Norte Portugal</div>
+      <div class="slice-country">Oporto + Gerês</div>
+    </div>
+  </div>
+  <div class="cover-slice s5">
+    <div class="slice-label">
+      <div class="slice-num">05</div>
+      <div class="slice-name">Atenas</div>
+      <div class="slice-country">Grecia + Islas</div>
+    </div>
+  </div>
+  <div class="cover-center">
+    <div class="cover-eyebrow">Vuelo directo desde Alicante · Otoño 2026</div>
+    <h1 class="cover-title">5 viajes<br>de <em>aventura</em></h1>
+    <div class="cover-sub">
+      <span class="cover-pill">2–3 personas</span>
+      <span class="cover-pill">Máx. 600 €</span>
+      <span class="cover-pill">Naturaleza · Fauna · Experiencias</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ NAV ══ -->
+<nav class="nav">
+  <button class="nav-btn nb-m active" onclick="show('m')">🌿 Marrakech</button>
+  <button class="nav-btn nb-s" onclick="show('s')">🏴󠁧󠁢󠁳󠁣󠁴󠁿 Escocia</button>
+  <button class="nav-btn nb-d" onclick="show('d')">⛰️ Dolomitas</button>
+  <button class="nav-btn nb-p" onclick="show('p')">🌊 Norte Portugal</button>
+  <button class="nav-btn nb-a" onclick="show('a')">☀️ Atenas</button>
+</nav>
+
+<!-- ══════════════════════════════════
+     01 · MARRAKECH
+══════════════════════════════════ -->
+<section class="dest dest-m active" id="dest-m">
+
+  <div class="dest-hero">
+    <img src="https://images.unsplash.com/photo-1573246123716-6b1782bfc499?w=1400&q=85" alt="Marruecos desierto">
+    <div class="dest-hero-grad">
+      <div class="hero-text">
+        <div class="hero-label">01 · Marruecos · Vuelo más corto y barato</div>
+        <h2 class="hero-title">Marrakech<br>+ Desierto del Sahara</h2>
+        <p class="hero-desc">Desierto, Atlas, medina, riads y naturaleza salvaje. El destino más diferente a 1h55 de vuelo directo.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="flight-bar">
+    <div class="fb-item">
+      <span class="fb-icon">✈️</span>
+      <div>
+        <span class="fb-label">Vuelo directo</span>
+        <span class="fb-val">ALC → Marrakech RAK · Ryanair</span>
+      </div>
+    </div>
+    <div class="fb-sep"></div>
+    <div class="fb-item">
+      <span class="fb-icon">⏱</span>
+      <div>
+        <span class="fb-label">Duración</span>
+        <span class="fb-val">1h 55min</span>
+      </div>
+    </div>
+    <div class="fb-sep"></div>
+    <div class="fb-item">
+      <span class="fb-icon">📅</span>
+      <div>
+        <span class="fb-label">Frecuencia</span>
+        <span class="fb-val">6 vuelos/semana</span>
+      </div>
+    </div>
+    <div class="fb-sep"></div>
+    <div class="fb-item">
+      <span class="fb-icon">💶</span>
+      <div>
+        <span class="fb-label">Precio desde</span>
+        <span class="fb-val">~40€ i/v</span>
+      </div>
+    </div>
+    <span class="doc-badge doc-warn">Pasaporte obligatorio</span>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat hl"><div class="n">280–360€</div><div class="l">Total / persona</div></div>
+    <div class="stat"><div class="n">18–25°C</div><div class="l">Temperatura oct-nov</div></div>
+    <div class="stat"><div class="n">Ryanair</div><div class="l">Aerolínea</div></div>
+    <div class="stat"><div class="n">Oct / Nov</div><div class="l">Mejor época</div></div>
+    <div class="stat"><div class="n">Pasaporte</div><div class="l">Documentación</div></div>
+  </div>
+
+  <div class="content-grid container">
+    <div>
+      <div class="mosaic">
+        <div class="ph">
+          <img src="https://images.unsplash.com/photo-1548919973-5cef591cdbc9?w=800&q=80" alt="Desierto Sahara">
+          <div class="ph-cap">Desierto del Sahara — Merzouga</div>
+        </div>
+        <div class="ph">
+          <img src="https://images.unsplash.com/photo-1503614472-8c93d56e92ce?w=500&q=80" alt="Atlas montañas">
+          <div class="ph-cap">Montañas del Atlas</div>
+        </div>
+        <div class="ph">
+          <img src="https://images.unsplash.com/photo-1567108748863-7d8b9fba6a89?w=500&q=80" alt="Marrakech medina">
+          <div class="ph-cap">Medina de Marrakech</div>
+        </div>
+      </div>
+
+      <div class="section-label">Experiencias</div>
+      <div class="exp-list">
+        <div class="exp-item"><div class="exp-num">1</div><div class="exp-body"><div class="exp-name">Excursión 2 días al Desierto del Sahara</div><div class="exp-desc">Camellos, noche en jaima bajo las estrellas en Merzouga, amanecer sobre las dunas. La experiencia más impresionante del viaje.</div></div></div>
+        <div class="exp-item"><div class="exp-num">2</div><div class="exp-body"><div class="exp-name">Trekking en las Montañas del Atlas</div><div class="exp-desc">Valle Ourika, cascadas de Setti Fadma, aldeas bereberes. Fauna: monos de Berbería, águilas, hienas rayadas en el desierto cercano.</div></div></div>
+        <div class="exp-item"><div class="exp-num">3</div><div class="exp-body"><div class="exp-name">Cascadas de Ouzoud — 110m de caída</div><div class="exp-desc">Las más altas de África del Norte. Monos macaco salvajes trepando por las rocas junto a las cascadas. A 3h de Marrakech.</div></div></div>
+        <div class="exp-item"><div class="exp-num">4</div><div class="exp-body"><div class="exp-name">Quad y buggy en el desierto rojo</div><div class="exp-desc">Dunas de arena roja a 1h de Marrakech. Circuitos de quads entre palmeras y paisaje lunar volcánico.</div></div></div>
+        <div class="exp-item"><div class="exp-num">5</div><div class="exp-body"><div class="exp-name">Riad con hammam y terraza</div><div class="exp-desc">Alojamiento en riad tradicional dentro de la medina. Hammam incluido, cena en azotea bajo las estrellas con música gnawa.</div></div></div>
+        <div class="exp-item"><div class="exp-num">6</div><div class="exp-body"><div class="exp-name">Djemaa el Fna al anochecer</div><div class="exp-desc">La plaza más viva del mundo. Encantadores de serpientes, acróbatas, músicos. Come en los puestos al aire libre por 5€.</div></div></div>
+      </div>
+    </div>
+
+    <div class="sidebar">
+      <div class="note-box">
+        <span class="note-icon">⭐</span>
+        <span>La mejor época es <strong>octubre y noviembre</strong>: clima perfecto 18-25°C, sin el calor extremo del verano. El vuelo más corto y barato de los 5 destinos.</span>
+      </div>
+      <div class="budget-card">
+        <div class="bc-head">Presupuesto por persona</div>
+        <div class="bc-body">
+          <div class="bc-row"><span>Vuelo i/v directo (Ryanair)</span><span class="bc-val">40–80€</span></div>
+          <div class="bc-row"><span>Riad 4 noches (÷2-3)</span><span class="bc-val">60–90€</span></div>
+          <div class="bc-row"><span>Excursión Sahara 2 días</span><span class="bc-val">70–100€</span></div>
+          <div class="bc-row"><span>Quad + Atlas + Ouzoud</span><span class="bc-val">50–60€</span></div>
+          <div class="bc-row"><span>Comida (muy barata in situ)</span><span class="bc-val">40–60€</span></div>
+          <div class="bc-row total"><span>Total estimado</span><span class="bc-val">280–360€</span></div>
+        </div>
+      </div>
+      <div class="links-card">
+        <div class="lc-head">Reservar</div>
+        <a class="link-item primary" href="https://www.ryanair.com/es/es/trip/flights/select?adults=2&dateOut=2026-11-11&originIata=ALC&destinationIata=RAK" target="_blank"><span class="li-icon">✈️</span><span>Vuelo Ryanair ALC→RAK</span><span class="li-arr">↗</span></a>
+        <a class="link-item primary" href="https://www.skyscanner.es/vuelos/alc/rak/261111.html?adults=2" target="_blank"><span class="li-icon">🔍</span><span>Comparar vuelos · Skyscanner</span><span class="li-arr">↗</span></a>
+        <a class="link-item" href="https://www.airbnb.es/s/Marrakech--Marruecos/homes?checkin=2026-11-11&checkout=2026-11-15&adults=2" target="_blank"><span class="li-icon">🏠</span><span>Riads en Airbnb</span><span class="li-arr">↗</span></a>
+        <a class="link-item" href="https://www.viator.com/es-ES/Marrakech/d28-ttd" target="_blank"><span class="li-icon">🗺️</span><span>Excursiones · Viator</span><span class="li-arr">↗</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     02 · ESCOCIA
+══════════════════════════════════ -->
+<section class="dest dest-s" id="dest-s">
+
+  <div class="dest-hero">
+    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1400&q=85" alt="Escocia Highlands">
+    <div class="dest-hero-grad">
+      <div class="hero-text">
+        <div class="hero-label">02 · Escocia · Naturaleza más salvaje de Europa</div>
+        <h2 class="hero-title">Highlands<br>e Isla de Skye</h2>
+        <p class="hero-desc">Glen Coe, Quiraing, Fairy Pools, ciervos rojos y águilas reales. Naturaleza brutal a 3h15 en directo.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="flight-bar">
+    <div class="fb-item"><span class="fb-icon">✈️</span><div><span class="fb-label">Vuelo directo</span><span class="fb-val">ALC → Edimburgo EDI · Ryanair / easyJet / Jet2</span></div></div>
+    <div class="fb-sep"></div>
+    <div class="fb-item"><span class="fb-icon">⏱</span><div><span class="fb-label">Duración</span><span class="fb-val">3h 15min</span></div></div>
+    <div class="fb-sep"></div>
+    <div class="fb-item"><span class="fb-icon">📅</span><div><span class="fb-label">Frecuencia</span><span class="fb-val">Diario</span></div></div>
+    <div class="fb-sep"></div>
+    <div class="fb-item"><span class="fb-icon">💶</span><div><span class="fb-label">Precio desde</span><span class="fb-val">~60€ i/v</span></div></div>
+    <span class="doc-badge doc-warn">Pasaporte · UK fuera UE</span>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat hl"><div class="n">310–435€</div><div class="l">Total / persona</div></div>
+    <div class="stat"><div class="n">5–10°C</div><div class="l">Temperatura nov</div></div>
+    <div class="stat"><div class="n">Ryanair</div><div class="l">Aerolínea directa</div></div>
+    <div class="stat"><div class="n">Sin peajes</div><div class="l">Autopistas UK</div></div>
+    <div class="stat"><div class="n">Pasaporte</div><div class="l">Documentación</div></div>
+  </div>
+
+  <div class="content-grid container">
+    <div>
+      <div class="mosaic">
+        <div class="ph"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80" alt="Highlands"><div class="ph-cap">Highlands escocesas</div></div>
+        <div class="ph"><img src="https://images.unsplash.com/photo-1571327073757-71d13c5f57a3?w=500&q=80" alt="Skye Storr"><div class="ph-cap">Old Man of Storr · Skye</div></div>
+        <div class="ph"><img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=500&q=80" alt="Glen Coe"><div class="ph-cap">Glen Coe al amanecer</div></div>
+      </div>
+      <div class="section-label">Experiencias</div>
+      <div class="exp-list">
+        <div class="exp-item"><div class="exp-num">1</div><div class="exp-body"><div class="exp-name">Glen Coe — senderismo entre ciervos rojos</div><div class="exp-desc">El valle glaciar más dramático de Escocia. Acantilados de 1.000m, cascadas y ciervos rojos salvajes. Águilas reales sobrevolando las crestas.</div></div></div>
+        <div class="exp-item"><div class="exp-num">2</div><div class="exp-body"><div class="exp-name">Old Man of Storr · Isla de Skye</div><div class="exp-desc">Pináculo de roca volcánica de 50m. Ruta de 4km con vistas al Atlántico y las Hébridas. En noviembre lo tienes para ti solo.</div></div></div>
+        <div class="exp-item"><div class="exp-num">3</div><div class="exp-body"><div class="exp-name">Quiraing — formaciones rocosas marcianas</div><div class="exp-desc">Cretas volcánicas que parecen de otro planeta. Una de las vistas más brutales de Europa. Ruta 7km de dificultad media.</div></div></div>
+        <div class="exp-item"><div class="exp-num">4</div><div class="exp-body"><div class="exp-name">Fairy Pools — cascadas y pozas turquesas</div><div class="exp-desc">Cascadas encadenadas de agua azul-verde helada al pie de los Cuillins. Sendero fácil de 2km. La foto más icónica de Escocia.</div></div></div>
+        <div class="exp-item"><div class="exp-num">5</div><div class="exp-body"><div class="exp-name">Neist Point Lighthouse</div><div class="exp-desc">El faro más occidental de Skye sobre acantilados atlánticos. Avistamiento de ballenas y delfines desde tierra en temporada.</div></div></div>
+        <div class="exp-item"><div class="exp-num">6</div><div class="exp-body"><div class="exp-name">Castillo Eilean Donan al atardecer</div><div class="exp-desc">El castillo más fotografiado de Escocia en una isleta entre tres lochs. Perfecto para cerrar el día.</div></div></div>
+      </div>
+    </div>
+    <div class="sidebar">
+      <div class="note-box">
+        <span class="note-icon">⚠️</span>
+        <span><strong>Pasaporte</strong> obligatorio — UK salió de la UE. En noviembre amanece a las 8h y anochece a las 16h. Lleva impermeable serio y botas impermeables. La isla estará prácticamente vacía.</span>
+      </div>
+      <div class="budget-card">
+        <div class="bc-head">Presupuesto por persona</div>
+        <div class="bc-body">
+          <div class="bc-row"><span>Vuelo i/v directo ALC–EDI</span><span class="bc-val">60–130€</span></div>
+          <div class="bc-row"><span>Coche 5 días (÷2-3)</span><span class="bc-val">70–95€</span></div>
+          <div class="bc-row"><span>Alojamiento 4 noches</span><span class="bc-val">80–110€</span></div>
+          <div class="bc-row"><span>Gasolina + castillo + parking</span><span class="bc-val">40–50€</span></div>
+          <div class="bc-row"><span>Comida (pubs + súper)</span><span class="bc-val">60–80€</span></div>
+          <div class="bc-row total"><span>Total estimado</span><span class="bc-val">310–435€</span></div>
+        </div>
+      </div>
+      <div class="links-card">
+        <div class="lc-head">Reservar</div>
+        <a class="link-item primary" href="https://www.ryanair.com/es/es/trip/flights/select?adults=2&dateOut=2026-11-11&originIata=ALC&destinationIata=EDI" target="_blank"><span class="li-icon">✈️</span><span>Vuelo Ryanair ALC→EDI</span><span class="li-arr">↗</span></a>
+        <a class="link-item primary" href="https://www.skyscanner.es/vuelos/alc/edi/261111.html?adults=2" target="_blank"><span class="li-icon">🔍</span><span>Comparar vuelos · Skyscanner</span><span class="li-arr">↗</span></a>
+        <a class="link-item" href="https://www.rentalcars.com/es/airport/GB/EDI/?pickup=2026-11-11T14:00&dropoff=2026-11-15T12:00" target="_blank"><span class="li-icon">🚗</span><span>Coche · Edimburgo</span><span class="li-arr">↗</span></a>
+        <a class="link-item" href="https://www.airbnb.es/s/Fort-William--Reino-Unido/homes?checkin=2026-11-11&checkout=2026-11-15&adults=2" target="_blank"><span class="li-icon">🏠</span><span>Airbnb Fort William</span><span class="li-arr">↗</span></a>
+        <a class="link-item" href="https://www.komoot.com/es-es/guide/1763056/rutas-de-senderismo-en-isla-de-skye" target="_blank"><span class="li-icon">🗺️</span><span>Rutas Skye · Komoot</span><span class="li-arr">↗</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     03 · DOLOMITAS
+══════════════════════════════════ -->
+<section class="dest dest-d" id="dest-d">
+
+  <div class="dest-hero">
+    <img src="https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=1400&q=85" alt="Dolomitas otoño">
+    <div class="dest-hero-grad">
+      <div class="hero-text">
+        <div class="hero-label">03 · Italia · Solo 1 día de vacaciones · El más barato</div>
+        <h2 class="hero-title">Dolomitas<br>en otoño</h2>
+        <p class="hero-desc">Torres de roca, lagos alpinos turquesa, alerces naranjas y fauna alpina. El puente de Todos los Santos te da 5 días.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="flight-bar">
+    <div class="fb-item"><span class="fb-icon">✈️</span><div><span class="fb-label">Vuelo directo</span><span class="fb-val">ALC → Treviso TSF · Ryanair</span></div></div>
+    <div class="fb-sep"></div>
+    <div class="fb-item"><span class="fb-icon">⏱</span><div><span class="fb-label">Duración</span><span class="fb-val">2h 10min</span></div></div>
+    <div class="fb-sep"></div>
+    <div class="fb-item"><span class="fb-icon">📅</span><div><span class="fb-label">Frecuencia</span><span class="fb-val">3 vuelos/semana</span></div></div>
+    <div class="fb-sep"></div>
+    <div class="fb-item"><span class="fb-icon">🗓️</span><div><span class="fb-label">Fechas clave</span><span class="fb-val">28 oct – 1 nov</span></div></div>
+    <span class="doc-badge doc-ok">Solo DNI</span>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat hl"><div class="n">270–380€</div><div class="l">Total / persona</div></div>
+    <div class="stat"><div class="n">5–12°C</div><div class="l">Temperatura oct</div></div>
+    <div class="stat"><div class="n">Ryanair</div><div class="l">Aerolínea directa</div></div>
+    <div class="stat"><div class="n">1 día</div><div class="l">Vacaciones pedidas</div></div>
+    <div class="stat"><div class="n">DNI</div><div class="l">Documentación</div></div>
+  </div>
+
+  <div class="content-grid container">
+    <div>
+      <div class="mosaic">
+        <div class="ph"><img src="https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=800&q=80" alt="Dolomitas"><div class="ph-cap">Torres de los Dolomitas</div></div>
+        <div class="ph"><img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=500&q=80" alt="Lago alpino"><div class="ph-cap">Lago di Braies</div></div>
+        <div class="ph"><img src="https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=500&q=80" alt="Valle alpino"><div class="ph-cap">Val di Funes en otoño</div></div>
+      </div>
+      <div class="section-label">Experiencias</div>
+      <div class="exp-list">
+        <div class="exp-item"><div class="exp-num">1</div><div class="exp-body"><div class="exp-name">Lago di Braies — amanecer y barca de madera</div><div class="exp-desc">El lago alpino más fotogénico de los Alpes. Agua turquesa rodeada de picos. Madruga para tenerlo solo. Barca de madera para recorrerlo.</div></div></div>
+        <div class="exp-item"><div class="exp-num">2</div><div class="exp-body"><div class="exp-name">Val di Funes — iglesia entre alerces naranjas</div><div class="exp-desc">La foto más reproducida de los Dolomitas: iglesia barroca del siglo XVII con las torres Odle al fondo entre explosión de colores otoñales.</div></div></div>
+        <div class="exp-item"><div class="exp-num">3</div><div class="exp-body"><div class="exp-name">Tres Cime di Lavaredo — ruta circular 10km</div><div class="exp-desc">Las tres torres de roca más icónicas de los Alpes. Vistas desde todos los ángulos. El final perfecto del viaje.</div></div></div>
+        <div class="exp-item"><div class="exp-num">4</div><div class="exp-body"><div class="exp-name">Seceda 2.500m — mirador vertical</div><div class="exp-desc">Cresta que se asoma verticalmente sobre el Val Gardena. Teleférico desde Ortisei. Vista 180° sobre los picos.</div></div></div>
+        <div class="exp-item"><div class="exp-num">5</div><div class="exp-body"><div class="exp-name">Pasos alpinos Sella y Gardena (2.200m)</div><div class="exp-desc">Puertos de alta montaña con vistas directas a las Torres del Sella. Fauna: marmotas y ciervos antes de hibernar.</div></div></div>
+        <div class="exp-item"><div class="exp-num">6</div><div class="exp-body"><div class="exp-name">Alpe di Siusi — la meseta alpina más grande de Europa</div><div class="exp-desc">56km² a 1.700m de altitud, prohibida al tráfico. Los últimos colores del otoño sobre un paisaje imposible.</div></div></div>
+      </div>
+    </div>
+    <div class="sidebar">
+      <div class="note-box">
+        <span class="note-icon">⭐</span>
+        <span><strong>Truco:</strong> el 1 de noviembre es festivo nacional. Con el finde y ese día, solo pides el miércoles 28 de vacaciones para tener 5 días completos. El destino más barato de los cinco.</span>
+      </div>
+      <div class="budget-card">
+        <div class="bc-head">Presupuesto por persona</div>
+        <div class="bc-body">
+          <div class="bc-row"><span>Vuelo i/v directo ALC–TSF</span><span class="bc-val">40–100€</span></div>
+          <div class="bc-row"><span>Coche 5 días (÷2-3)</span><span class="bc-val">60–80€</span></div>
+          <div class="bc-row"><span>Alojamiento 4 noches</span><span class="bc-val">70–100€</span></div>
+          <div class="bc-row"><span>Teleférico + parkings</span><span class="bc-val">25–35€</span></div>
+          <div class="bc-row"><span>Comida (rifugios + súper)</span><span class="bc-val">70–90€</span></div>
+          <div class="bc-row total"><span>Total estimado</span><span class="bc-val">270–380€</span></div>
+        </div>
+      </div>
+      <div class="links-card">
+        <div class="lc-head">Reservar</div>
+        <a class="link-item primary" href="https://www.ryanair.com/es/es/trip/flights/select?adults=2&dateOut=2026-10-28&originIata=ALC&destinationIata=TSF" target="_blank"><span class="li-icon">✈️</span><span>Vuelo Ryanair ALC→TSF</span><span class="li-arr">↗</span></a>
+        <a class="link-item primary" href="https://www.skyscanner.es/vuelos/alc/tsf/261028.html?adults=2" target="_blank"><span class="li-icon">🔍</span><span>Comparar vuelos · Skyscanner</span><span class="li-arr">↗</span></a>
+        <a class="link-item" href="https://www.rentalcars.com/es/airport/IT/TSF/?pickup=2026-10-28T14:00&dropoff=2026-11-01T12:00" target="_blank"><span class="li-icon">🚗</span><span>Coche · Treviso</span><span class="li-arr">↗</span></a>
+        <a class="link-item" href="https://www.airbnb.es/s/Val-di-Funes--Italia/homes?checkin=2026-10-28&checkout=2026-11-01&adults=2" target="_blank"><span class="li-icon">🏠</span><span>Airbnb Val di Funes</span><span class="li-arr">↗</span></a>
+        <a class="link-item" href="https://www.komoot.com/es-es/guide/37/rutas-de-senderismo-en-los-dolomitas" target="_blank"><span class="li-icon">🗺️</span><span>Rutas Dolomitas · Komoot</span><span class="li-arr">↗</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     04 · NORTE PORTUGAL / OPORTO
+══════════════════════════════════ -->
+<section class="dest dest-p" id="dest-p">
+
+  <div class="dest-hero">
+    <img src="https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=1400&q=85" alt="Norte Portugal naturaleza">
+    <div class="dest-hero-grad">
+      <div class="hero-text">
+        <div class="hero-label">04 · Portugal · El único parque nacional de Portugal</div>
+        <h2 class="hero-title">Norte de Portugal<br>Oporto + Gerês</h2>
+        <p class="hero-desc">Peneda-Gerês: el último reducto del lobo ibérico y el águila real. Kayak, cascadas y pozas naturales a 1h40 en directo.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="flight-bar">
+    <div class="fb-item"><span class="fb-icon">✈️</span><div><span class="fb-label">Vuelo directo</span><span class="fb-val">ALC → Oporto OPO · Ryanair</span></div></div>
+    <div class="fb-sep"></div>
+    <div class="fb-item"><span class="fb-icon">⏱</span><div><span class="fb-label">Duración</span><span class="fb-val">1h 40min</span></div></div>
+    <div class="fb-sep"></div>
+    <div class="fb-item"><span class="fb-icon">📅</span><div><span class="fb-label">Frecuencia</span><span class="fb-val">10 vuelos/semana</span></div></div>
+    <div class="fb-sep"></div>
+    <div class="fb-item"><span class="fb-icon">💶</span><div><span class="fb-label">Precio desde</span><span class="fb-val">~30€ i/v</span></div></div>
+    <span class="doc-badge doc-ok">Solo DNI</span>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat hl"><div class="n">290–390€</div><div class="l">Total / persona</div></div>
+    <div class="stat"><div class="n">14–18°C</div><div class="l">Temperatura oct-nov</div></div>
+    <div class="stat"><div class="n">Ryanair</div><div class="l">Aerolínea directa</div></div>
+    <div class="stat"><div class="n">10/semana</div><div class="l">Vuelos semanales</div></div>
+    <div class="stat"><div class="n">DNI</div><div class="l">Documentación</div></div>
+  </div>
+
+  <div class="content-grid container">
+    <div>
+      <div class="mosaic">
+        <div class="ph"><img src="https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=800&q=80" alt="Parque Gerês"><div class="ph-cap">Parque Nacional Peneda-Gerês</div></div>
+        <div class="ph"><img src="https://images.unsplash.com/photo-1564419431959-a94f93bc4f36?w=500&q=80" alt="Cascadas Portugal"><div class="ph-cap">Cascadas y pozas naturales</div></div>
+        <div class="ph"><img src="https://images.unsplash.com/photo-1504701954957-2010ec3bcec1?w=500&q=80" alt="Kayak río"><div class="ph-cap">Kayak en el embalse de Caniçada</div></div>
+      </div>
+      <div class="section-label">Experiencias</div>
+      <div class="exp-list">
+        <div class="exp-item"><div class="exp-num">1</div><div class="exp-body"><div class="exp-name">Kayak en el Parque Nacional Peneda-Gerês</div><div class="exp-desc">Kayak en el embalse de Caniçada con montañas al fondo. Pozas naturales para bañarse. Excursión de día completo en 4x4 desde Oporto con almuerzo incluido.</div></div></div>
+        <div class="exp-item"><div class="exp-num">2</div><div class="exp-body"><div class="exp-name">Lobo ibérico, águila real y caballos salvajes</div><div class="exp-desc">El Gerês es el último reducto del lobo ibérico en Portugal y hogar del águila real y la cigüeña negra. Los garanos (caballos salvajes) viven libres en las montañas.</div></div></div>
+        <div class="exp-item"><div class="exp-num">3</div><div class="exp-body"><div class="exp-name">Pasarelas del Paiva — senderismo épico</div><div class="exp-desc">8km de pasarelas de madera sobre el río Paiva a través de cañones y bosques. Declarado uno de los mejores senderos de Europa.</div></div></div>
+        <div class="exp-item"><div class="exp-num">4</div><div class="exp-body"><div class="exp-name">Cascadas do Arado y Pozo Azul</div><div class="exp-desc">Cascadas dentro del Gerês con pozas de agua fría transparente. Baño natural en plena naturaleza entre rocas de granito.</div></div></div>
+        <div class="exp-item"><div class="exp-num">5</div><div class="exp-body"><div class="exp-name">Tubing en el río Paiva</div><div class="exp-desc">Descenso por el río Paiva en flotador. Adrenalina y naturaleza a partes iguales. Una de las actividades más populares del norte de Portugal.</div></div></div>
+        <div class="exp-item"><div class="exp-num">6</div><div class="exp-body"><div class="exp-name">Geoparque de Arouca y puente 516</div><div class="exp-desc">El puente colgante peatonal más largo del mundo (516m) sobre un cañón fluvial. Vértigo y naturaleza al mismo tiempo.</div></div></div>
+      </div>
+    </div>
+    <div class="sidebar">
+      <div class="note-box">
+        <span class="note-icon">🌊</span>
+        <span>Oporto es la puerta de entrada, pero el viaje real está en el norte: el Gerês es el único parque nacional de Portugal y uno de los ecosistemas más biodiversos de la Península. Octubre es el mejor mes.</span>
+      </div>
+      <div class="budget-card">
+        <div class="bc-head">Presupuesto por persona</div>
+        <div class="bc-body">
+          <div class="bc-row"><span>Vuelo i/v directo ALC–OPO</span><span class="bc-val">30–80€</span></div>
+          <div class="bc-row"><span>Coche 5 días (÷2-3)</span><span class="bc-val">60–80€</span></div>
+          <div class="bc-row"><span>Alojamiento 4 noches</span><span class="bc-val">70–100€</span></div>
+          <div class="bc-row"><span>Excursión kayak Gerês (día completo)</span><span class="bc-val">60–80€</span></div>
+          <div class="bc-row"><span>Pasarelas Paiva + Puente 516</span><span class="bc-val">15–20€</span></div>
+          <div class="bc-row"><span>Comida (barata, excelente)</span><span class="bc-val">55–75€</span></div>
+          <div class="bc-row total"><span>Total estimado</span><span class="bc-val">290–390€</span></div>
+        </div>
+      </div>
+      <div class="links-card">
+        <div class="lc-head">Reservar</div>
+        <a class="link-item primary" href="https://www.ryanair.com/es/es/trip/flights/select?adults=2&dateOut=2026-11-11&originIata=ALC&destinationIata=OPO" target="_blank"><span class="li-icon">✈️</span><span>Vuelo Ryanair ALC→OPO</span><span class="li-arr">↗</span></a>
+        <a class="link-item primary" href="https://www.skyscanner.es/vuelos/alc/opo/261111.html?adults=2" target="_blank"><span class="li-icon">🔍</span><span>Comparar vuelos · Skyscanner</span><span class="li-arr">↗</span></a>
+        <a class="link-item" href="https://www.rentalcars.com/es/airport/PT/OPO/?pickup=2026-11-11T14:00&dropoff=2026-11-15T12:00" target="_blank"><span class="li-icon">🚗</span><span>Coche · Oporto</span><span class="li-arr">↗</span></a>
+        <a class="link-item" href="https://www.viator.com/es-ES/Northern-Portugal-tours/Hiking-and-Camping/d219-g9-c35" target="_blank"><span class="li-icon">🗺️</span><span>Excursiones Gerês · Viator</span><span class="li-arr">↗</span></a>
+        <a class="link-item" href="https://www.airbnb.es/s/Norte--Portugal/homes?checkin=2026-11-11&checkout=2026-11-15&adults=2" target="_blank"><span class="li-icon">🏠</span><span>Airbnb Norte Portugal</span><span class="li-arr">↗</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     05 · ATENAS
+══════════════════════════════════ -->
+<section class="dest dest-a" id="dest-a">
+
+  <div class="dest-hero">
+    <img src="https://images.unsplash.com/photo-1533104816931-20fa691ff6ca?w=1400&q=85" alt="Grecia naturaleza">
+    <div class="dest-hero-grad">
+      <div class="hero-text">
+        <div class="hero-label">05 · Grecia · Ferry a islas vírgenes desde el mismo puerto</div>
+        <h2 class="hero-title">Atenas<br>+ Islas del Egeo</h2>
+        <p class="hero-desc">Senderismo en el Himeto, kayak de mar, islas sin coches y playas salvajes de la Ática. Octubre 22°C.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="flight-bar">
+    <div class="fb-item"><span class="fb-icon">✈️</span><div><span class="fb-label">Vuelo directo</span><span class="fb-val">ALC → Atenas ATH · easyJet</span></div></div>
+    <div class="fb-sep"></div>
+    <div class="fb-item"><span class="fb-icon">⏱</span><div><span class="fb-label">Duración</span><span class="fb-val">3h 15min</span></div></div>
+    <div class="fb-sep"></div>
+    <div class="fb-item"><span class="fb-icon">📅</span><div><span class="fb-label">Mejor época</span><span class="fb-val">Octubre</span></div></div>
+    <div class="fb-sep"></div>
+    <div class="fb-item"><span class="fb-icon">💶</span><div><span class="fb-label">Precio desde</span><span class="fb-val">~80€ i/v</span></div></div>
+    <span class="doc-badge doc-ok">Solo DNI</span>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat hl"><div class="n">380–520€</div><div class="l">Total / persona</div></div>
+    <div class="stat"><div class="n">20–25°C</div><div class="l">Temperatura oct</div></div>
+    <div class="stat"><div class="n">easyJet</div><div class="l">Aerolínea directa</div></div>
+    <div class="stat"><div class="n">Ferry</div><div class="l">Islas desde el puerto</div></div>
+    <div class="stat"><div class="n">DNI</div><div class="l">Documentación</div></div>
+  </div>
+
+  <div class="content-grid container">
+    <div>
+      <div class="mosaic">
+        <div class="ph"><img src="https://images.unsplash.com/photo-1533104816931-20fa691ff6ca?w=800&q=80" alt="Grecia mar"><div class="ph-cap">Islas del Egeo — agua cristalina</div></div>
+        <div class="ph"><img src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=500&q=80" alt="Senderismo Grecia"><div class="ph-cap">Monte Himeto — senderismo</div></div>
+        <div class="ph"><img src="https://images.unsplash.com/photo-1504701954957-2010ec3bcec1?w=500&q=80" alt="Kayak Grecia"><div class="ph-cap">Kayak de mar en las Cícladas</div></div>
+      </div>
+      <div class="section-label">Experiencias</div>
+      <div class="exp-list">
+        <div class="exp-item"><div class="exp-num">1</div><div class="exp-body"><div class="exp-name">Ferry a la isla de Hidra — sin coches ni motos</div><div class="exp-desc">La única isla de Grecia sin vehículos a motor. Solo burros, senderos y playas escondidas. A 2h en ferry desde el Pireo. Agua cristalina en octubre.</div></div></div>
+        <div class="exp-item"><div class="exp-num">2</div><div class="exp-body"><div class="exp-name">Senderismo en el Monte Himeto (1.026m)</div><div class="exp-desc">Vista panorámica de Atenas y el Egeo desde la cima. Flora mediterránea única: tomillo, salvia y orquídeas silvestres. Fauna: serpientes de Esculapio y rapaces.</div></div></div>
+        <div class="exp-item"><div class="exp-num">3</div><div class="exp-body"><div class="exp-name">Kayak de mar en las islas Sarónicas</div><div class="exp-desc">Cuevas marinas, calas escondidas y fondeos en agua turquesa. Excursión de día desde Atenas o desde la propia isla de Hidra.</div></div></div>
+        <div class="exp-item"><div class="exp-num">4</div><div class="exp-body"><div class="exp-name">Costa de Ática — playas salvajes a 40min de metro</div><div class="exp-desc">Playas de guijarros entre pinos y acantilados. Sounio: templo de Poseidón sobre el cabo más al sur de Ática, directamente sobre el mar.</div></div></div>
+        <div class="exp-item"><div class="exp-num">5</div><div class="exp-body"><div class="exp-name">Colina Lycabetto al atardecer</div><div class="exp-desc">La mejor vista de Atenas, la Acrópolis y el mar Egeo desde 277m. 30min a pie por el bosque de pinos desde el barrio de Kolonaki.</div></div></div>
+        <div class="exp-item"><div class="exp-num">6</div><div class="exp-body"><div class="exp-name">Parque Nacional Parnitha — lobo y ciervo</div><div class="exp-desc">El bosque más grande de Ática, a 40km de Atenas. Lobos grises, ciervos y buitres leonados. Senderismo por bosques de abetos y encinas.</div></div></div>
+      </div>
+    </div>
+    <div class="sidebar">
+      <div class="note-box">
+        <span class="note-icon">☀️</span>
+        <span><strong>Octubre es el mes perfecto</strong> para Atenas: 22-25°C, el Egeo aún está templado para bañarse, sin las multitudes del verano y con precios mucho más bajos.</span>
+      </div>
+      <div class="budget-card">
+        <div class="bc-head">Presupuesto por persona</div>
+        <div class="bc-body">
+          <div class="bc-row"><span>Vuelo i/v directo ALC–ATH</span><span class="bc-val">80–150€</span></div>
+          <div class="bc-row"><span>Alojamiento 4 noches (÷2-3)</span><span class="bc-val">80–110€</span></div>
+          <div class="bc-row"><span>Ferries islas (Hidra + Egina)</span><span class="bc-val">40–60€</span></div>
+          <div class="bc-row"><span>Kayak de mar + excursiones</span><span class="bc-val">50–70€</span></div>
+          <div class="bc-row"><span>Transporte local + metro</span><span class="bc-val">20–30€</span></div>
+          <div class="bc-row"><span>Comida y bebida</span><span class="bc-val">70–90€</span></div>
+          <div class="bc-row total"><span>Total estimado</span><span class="bc-val">380–520€</span></div>
+        </div>
+      </div>
+      <div class="links-card">
+        <div class="lc-head">Reservar</div>
+        <a class="link-item primary" href="https://www.skyscanner.es/vuelos/alc/ath/261028.html?adults=2" target="_blank"><span class="li-icon">✈️</span><span>Vuelos ALC→ATH · Skyscanner</span><span class="li-arr">↗</span></a>
+        <a class="link-item primary" href="https://www.skyscanner.es/vuelos/alc/ath/261111.html?adults=2" target="_blank"><span class="li-icon">📅</span><span>Fechas noviembre · Skyscanner</span><span class="li-arr">↗</span></a>
+        <a class="link-item" href="https://www.airbnb.es/s/Atenas--Grecia/homes?checkin=2026-10-28&checkout=2026-11-01&adults=2" target="_blank"><span class="li-icon">🏠</span><span>Airbnb Atenas</span><span class="li-arr">↗</span></a>
+        <a class="link-item" href="https://www.viator.com/es-ES/Athens/d496-ttd" target="_blank"><span class="li-icon">🗺️</span><span>Excursiones · Viator Atenas</span><span class="li-arr">↗</span></a>
+        <a class="link-item" href="https://www.ferryhopper.com/es" target="_blank"><span class="li-icon">⛴️</span><span>Ferries a las islas · Ferryhopper</span><span class="li-arr">↗</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+function show(id){
+  document.querySelectorAll('.dest').forEach(d=>d.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('dest-'+id).classList.add('active');
+  document.querySelector('.nb-'+id).classList.add('active');
+  window.scrollTo({top:document.querySelector('.nav').offsetTop,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
